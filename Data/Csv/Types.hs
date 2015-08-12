@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Data.Csv.Types
     (
     -- * Core CSV types
@@ -17,6 +19,9 @@ import qualified Data.ByteString as S
 import qualified Data.HashMap.Strict as HM
 import Data.Vector (Vector)
 import qualified Data.Vector as V
+import GHC.Generics (Generic)
+import Data.Typeable (Typeable)
+import Data.Data (Data)
 
 -- | CSV data represented as a Haskell vector of vector of
 -- bytestrings.
@@ -46,5 +51,6 @@ toNamedRecord :: Header -> Record -> NamedRecord
 toNamedRecord hdr v = HM.fromList . V.toList $ V.zip hdr v
 
 -- | Is the CSV data preceded by a header?
-data HasHeader = HasHeader  -- ^ The CSV data is preceded by a header
-               | NoHeader   -- ^ The CSV data is not preceded by a header
+data HasHeader = NoHeader   -- ^ The CSV data is not preceded by a header
+               | HasHeader  -- ^ The CSV data is preceded by a header
+    deriving (Show, Read, Eq, Ord, Enum, Typeable, Data, Generic)
